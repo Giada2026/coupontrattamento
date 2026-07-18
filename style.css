@@ -1,0 +1,320 @@
+/* =========================================================================
+   MAISONIQUE — GIFT CARD
+   Foglio di stile — organizzato per essere modificato facilmente.
+   Tutte le variabili di colore, font e spaziatura sono raccolte in :root.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. VARIABILI — Cambia qui colori, font e dimensioni: si aggiorna tutto.
+   ------------------------------------------------------------------------- */
+:root{
+  /* Palette — ricavata dal logo ufficiale Maisonique */
+  --bg:            #000000;   /* fondo — nero pieno */
+  --bg-panel:      #0D0D0D;   /* pannelli leggermente più chiari */
+  --gold-light:    #F3D98B;   /* oro chiaro / highlight */
+  --gold-mid:      #CBA052;   /* oro medio */
+  --gold-deep:     #8B6B2E;   /* oro profondo / ombra */
+  --ivory:         #F7F3EC;   /* testo principale chiaro */
+  --ivory-dim:     #B9B1A2;   /* testo secondario, più tenue */
+  --hairline:      rgba(203,160,82,.38); /* linee sottili oro */
+  --hairline-soft: rgba(203,160,82,.18);
+
+  /* Gradiente oro riutilizzabile (testo/titoli) */
+  --gold-gradient: linear-gradient(115deg, var(--gold-deep) 0%, var(--gold-mid) 35%, var(--gold-light) 55%, var(--gold-mid) 75%, var(--gold-deep) 100%);
+
+  /* Font — coerenti con il logotipo serif elegante del brand */
+  --font-display: 'Playfair Display', 'Times New Roman', serif;      /* Titoli, importo */
+  --font-body:    'Cormorant Garamond', 'Georgia', serif;            /* Testo, etichette, footer */
+
+  /* Formato carta — A5 orizzontale */
+  --card-w: 210mm;
+  --card-h: 148mm;
+  --margin: 9mm;
+}
+
+/* -------------------------------------------------------------------------
+   2. RESET & IMPOSTAZIONI BASE
+   ------------------------------------------------------------------------- */
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+html,body{
+  background:#1a1a1a; /* colore fuori-carta, solo per anteprima a schermo */
+  font-family: var(--font-body);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* -------------------------------------------------------------------------
+   3. IMPOSTAZIONE PAGINA / STAMPA — Formato A5 orizzontale, 300dpi-ready
+   ------------------------------------------------------------------------- */
+@page{
+  size: A5 landscape;
+  margin: 0;
+}
+
+@media print{
+  html,body{ background:none; }
+  .screen-only{ display:none !important; }
+  .card{ box-shadow:none !important; margin:0 !important; }
+}
+
+/* -------------------------------------------------------------------------
+   4. CARD — Contenitore principale
+   ------------------------------------------------------------------------- */
+.card{
+  position:relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  margin: 12mm auto;
+  background:
+    radial-gradient(120% 140% at 50% 0%, #111111 0%, var(--bg) 55%, #000000 100%);
+  color: var(--ivory);
+  overflow:hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+
+/* Cornice doppia sottile — richiama il riquadro del marchio */
+.card__frame{
+  position:absolute;
+  inset: var(--margin);
+  border: 1pt solid var(--hairline);
+  pointer-events:none;
+}
+.card__frame::before{
+  content:"";
+  position:absolute;
+  inset: 3mm;
+  border: .5pt solid var(--hairline-soft);
+}
+
+/* Angoli decorativi a "L" — dettaglio discreto, non ridondante col logo */
+.corner{ position:absolute; width:9mm; height:9mm; pointer-events:none; }
+.corner::before,.corner::after{ content:""; position:absolute; background:var(--gold-mid); opacity:.55; }
+.corner::before{ width:100%; height:.5pt; top:0; left:0; }
+.corner::after{ width:.5pt; height:100%; top:0; left:0; }
+.corner--tl{ top: calc(var(--margin) + 3mm); left: calc(var(--margin) + 3mm); }
+.corner--tr{ top: calc(var(--margin) + 3mm); right: calc(var(--margin) + 3mm); transform: scaleX(-1); }
+.corner--bl{ bottom: calc(var(--margin) + 3mm); left: calc(var(--margin) + 3mm); transform: scaleY(-1); }
+.corner--br{ bottom: calc(var(--margin) + 3mm); right: calc(var(--margin) + 3mm); transform: scale(-1); }
+
+/* -------------------------------------------------------------------------
+   5. CONTENUTO — Griglia interna
+   ------------------------------------------------------------------------- */
+.card__content{
+  position:relative;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding: 8mm 16mm 6mm;
+  text-align:center;
+}
+
+/* ---- Header: logo + wordmark ---- */
+.brand{ display:flex; flex-direction:column; align-items:center; }
+
+.brand__mark{
+  width: 12mm;
+  height: 12mm;
+  object-fit:contain;
+  margin-bottom: 2mm;
+}
+
+.brand__word{
+  font-family: var(--font-display);
+  font-weight:700;
+  font-size: 20pt;
+  letter-spacing:.5pt;
+  line-height:1;
+  color: var(--ivory);
+}
+
+.brand__sub{
+  margin-top: 1.6mm;
+  font-family: var(--font-body);
+  font-size: 8pt;
+  letter-spacing: 2.4pt;
+  text-transform:uppercase;
+  color: var(--gold-mid);
+}
+
+/* ---- Divisore con rombo centrale ---- */
+.divider{
+  display:flex; align-items:center; gap:3mm;
+  width:100%; max-width:120mm;
+  margin: 4mm 0;
+}
+.divider__line{ flex:1; height:.5pt; background:var(--hairline); }
+.divider__gem{
+  width:2mm; height:2mm; background:var(--gold-mid);
+  transform:rotate(45deg);
+  box-shadow:0 0 0 3px var(--bg), 0 0 0 3.5px var(--hairline);
+}
+
+/* ---- Titolo Gift Card ---- */
+.title{
+  font-family: var(--font-body);
+  font-size: 9pt;
+  letter-spacing: 5pt;
+  text-transform: uppercase;
+  color: var(--ivory-dim);
+}
+.title strong{
+  display:block;
+  font-family: var(--font-display);
+  font-size: 15pt;
+  letter-spacing: 3pt;
+  color: var(--ivory);
+  margin-top: 1mm;
+}
+
+/* ---- Importo (elemento focale) ---- */
+.amount{
+  margin: 4mm 0 5mm;
+}
+.amount__label{
+  font-size: 7.5pt;
+  letter-spacing: 3pt;
+  text-transform:uppercase;
+  color: var(--ivory-dim);
+  margin-bottom: 1mm;
+}
+.amount__value{
+  font-family: var(--font-display);
+  font-weight:700;
+  font-size: 46pt;
+  line-height:1;
+  background: var(--gold-gradient);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color: var(--gold-mid); /* fallback se il browser non supporta il clip */
+  display:inline-block;
+}
+.amount__value .cur{ font-size:0.55em; vertical-align: 0.35em; margin-right:2mm; }
+
+/* ---- Sezione Destinatario / Mittente ---- */
+.parties{
+  display:flex;
+  width:100%;
+  max-width: 150mm;
+  justify-content:space-between;
+  gap: 10mm;
+  margin-bottom: 4mm;
+}
+.party{ flex:1; text-align:left; }
+.party--right{ text-align:right; }
+.party__label{
+  font-size: 7pt;
+  letter-spacing: 2.5pt;
+  text-transform:uppercase;
+  color: var(--gold-mid);
+  margin-bottom: 1.5mm;
+}
+.party__value{
+  font-family: var(--font-display);
+  font-size: 12.5pt;
+  color: var(--ivory);
+  border-bottom: .5pt dotted var(--hairline);
+  padding-bottom: 1.5mm;
+  min-height: 6mm;
+}
+
+/* ---- Messaggio personalizzato (facoltativo) ---- */
+.message{
+  width:100%;
+  max-width:150mm;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 10.5pt;
+  line-height:1.5;
+  color: var(--ivory-dim);
+  margin-bottom: 4mm;
+}
+.message::before,.message::after{ content:'"'; color:var(--gold-mid); }
+
+/* ---- Riga inferiore: codice / date ---- */
+.meta{
+  margin-top:auto;
+  width:100%;
+  max-width:160mm;
+  display:flex;
+  justify-content:space-between;
+  padding-top: 3mm;
+  border-top: .5pt solid var(--hairline);
+}
+.meta__item{ text-align:left; }
+.meta__item--center{ text-align:center; }
+.meta__item--right{ text-align:right; }
+.meta__label{
+  font-size: 6.5pt;
+  letter-spacing:1.8pt;
+  text-transform:uppercase;
+  color: var(--ivory-dim);
+  margin-bottom:.8mm;
+}
+.meta__value{
+  font-family: var(--font-body);
+  font-size: 10.5pt;
+  letter-spacing:1pt;
+  color: var(--ivory);
+}
+.meta__value--code{
+  font-family: 'Courier New', monospace;
+  letter-spacing:2pt;
+  color: var(--gold-light);
+}
+
+/* ---- Condizioni d'uso (facoltative) ---- */
+.terms{
+  margin-top: 2.5mm;
+  font-size: 6pt;
+  line-height:1.4;
+  color: var(--ivory-dim);
+  opacity:.75;
+  max-width:170mm;
+}
+
+/* ---- Footer contatti ---- */
+.footer{
+  margin-top: 3mm;
+  font-size: 7pt;
+  letter-spacing: .8pt;
+  color: var(--gold-mid);
+}
+.footer span{ margin: 0 2mm; color: var(--ivory-dim); }
+
+/* -------------------------------------------------------------------------
+   6. EDITABILITÀ A SCHERMO — evidenzia i campi modificabili al passaggio
+   del mouse (non stampato, vedi @media print sopra)
+   ------------------------------------------------------------------------- */
+[contenteditable="true"]{
+  outline: none;
+  border-radius: 2px;
+  transition: box-shadow .15s ease;
+}
+[contenteditable="true"]:hover,
+[contenteditable="true"]:focus{
+  box-shadow: 0 0 0 2px var(--hairline);
+  background: rgba(203,160,82,.08);
+}
+
+/* -------------------------------------------------------------------------
+   7. VERSIONE DIGITALE / RESPONSIVE — per invio via email o WhatsApp
+   Attiva aggiungendo la classe "card--digital" al contenitore .card
+   ------------------------------------------------------------------------- */
+@media screen and (max-width: 700px){
+  body{ padding: 20px 0; }
+  .card{
+    width: 92vw;
+    height: calc(92vw * (148/210));
+    margin: 0 auto;
+  }
+  .brand__word{ font-size: 5.6vw; }
+  .amount__value{ font-size: 11vw; }
+  .title strong{ font-size: 4vw; }
+  .parties{ flex-direction:column; gap:4mm; }
+  .party--right{ text-align:left; }
+  .meta{ flex-direction:column; gap:2.5mm; }
+  .meta__item--center,.meta__item--right{ text-align:left; }
+  .footer{ font-size: 2.4vw; }
+}
